@@ -4,8 +4,8 @@
     {
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public string CreatedBy { get; set; }
+        public string CreatedByUserId { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public string UpdatedBy { get; set; }
+        public string UpdatedByUserId { get; set; }
     }
 }
