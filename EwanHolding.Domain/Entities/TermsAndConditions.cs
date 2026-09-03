@@ -2,7 +2,7 @@
 
 namespace EwanHolding.Domain.Entities
 {
-    public class Terms : BaseEntity
+    public class TermsAndConditions : BaseEntity
     {
         public string TitleAr { get; set; }
         public string TitleEn { get; set; }
