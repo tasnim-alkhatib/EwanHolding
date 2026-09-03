@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="EwanHolding.Domain/EwanHolding.Domain.csproj" />
+  <Project Path="EwanHolding/EwanHolding.Api.csproj" />
+</Solution>

@@ -1,0 +1,6 @@
+@EwanHolding_HostAddress = http://localhost:5266
+
+GET {{EwanHolding_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
