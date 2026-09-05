@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="EwanHolding.Application/EwanHolding.Application.csproj" Id="441c365c-7ea2-45c3-ad55-d9bf9369f618" />
   <Project Path="EwanHolding.Domain/EwanHolding.Domain.csproj" />
   <Project Path="EwanHolding.Infrastructure/EwanHolding.Infrastructure.csproj" />
   <Project Path="EwanHolding/EwanHolding.Api.csproj" />

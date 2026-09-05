@@ -1,6 +1,12 @@
+using EwanHolding.Domain.Entities;
+using EwanHolding.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
-using EwanHolding.Infrastructure.Persistence;
+using EwanHolding.Application.UnitOfWork;
+using EwanHolding.Application.Repositories.Implementation;
+using EwanHolding.Application.Repositories.Interfaces;
+using EwanHolding.Application.Services.Implementation;
+using EwanHolding.Application.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +18,12 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<EwanHoldingDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IAdminService, AdminService>();
+
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
