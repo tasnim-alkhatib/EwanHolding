@@ -1,4 +1,3 @@
-using EwanHolding.Domain.Entities;
 using EwanHolding.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -7,6 +6,9 @@ using EwanHolding.Application.Repositories.Implementation;
 using EwanHolding.Application.Repositories.Interfaces;
 using EwanHolding.Application.Services.Implementation;
 using EwanHolding.Application.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,22 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<EwanHoldingDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["AppSettings:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["AppSettings:Audience"],
+            ValidateLifetime = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:token"]!)),
+            ValidateIssuerSigningKey = true
+
+        };
+    });
 
 builder.Services.AddScoped<IAdminService, AdminService>();
 

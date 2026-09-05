@@ -28,6 +28,7 @@ namespace EwanHolding.Application.DTOs
         public bool IsActive { get; set; } 
         public AdminRole Role { get; set; }
         public DateTime? LastLoginAt { get; set; }
+        public string Token { get; set; }
     }
 
     public class LoginDto

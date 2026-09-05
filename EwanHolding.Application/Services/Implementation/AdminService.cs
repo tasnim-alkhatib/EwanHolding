@@ -1,17 +1,24 @@
-﻿using EwanHolding.Application.Services.Interfaces;
+﻿using System.Security.Claims;
+using EwanHolding.Application.Services.Interfaces;
 using EwanHolding.Application.DTOs;
 using EwanHolding.Application.UnitOfWork;
 using EwanHolding.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.Extensions.Configuration;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace EwanHolding.Application.Services.Implementation
 {
     public class AdminService : IAdminService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public AdminService(IUnitOfWork unitOfWork)
+        private readonly IConfiguration _configuration;
+        public AdminService(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
+            _configuration = configuration;
         }
 
         public async Task<IEnumerable<AdminResponseDto>> GetAllAsync()
@@ -84,7 +91,7 @@ namespace EwanHolding.Application.Services.Implementation
 
         public async Task DeleteAsync(int id)
         {
-           var admin = await _unitOfWork.Admins.GetByIdAsync(id);
+            var admin = await _unitOfWork.Admins.GetByIdAsync(id);
             if (admin == null) throw new Exception($"Admin with ID {id} not found.");
 
             _unitOfWork.Admins.Delete(admin);
@@ -98,14 +105,13 @@ namespace EwanHolding.Application.Services.Implementation
 
             var isPasswordValid = new PasswordHasher<Admin>().VerifyHashedPassword(admin, admin.PasswordHash, loginDto.Password) == PasswordVerificationResult.Success;
             if (!isPasswordValid) throw new Exception("Invalid credentials.");
-             
+
             admin.LastLoginAt = DateTime.UtcNow;
-            
+
             _unitOfWork.Admins.Update(admin);
             await _unitOfWork.SaveChangesAsync();
 
-            // jwt token generation logic should be implemented here
-            // For now, we will return the admin details without a token
+            var token = CreateToken(admin);
 
             var adminDto = new AdminResponseDto
             {
@@ -114,10 +120,36 @@ namespace EwanHolding.Application.Services.Implementation
                 Email = admin.Email,
                 IsActive = admin.IsActive,
                 Role = admin.Role,
-                LastLoginAt = admin.LastLoginAt
+                LastLoginAt = admin.LastLoginAt,
+                Token = token
             };
 
             return adminDto;
+        }
+
+        private string CreateToken(Admin admin)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, admin.Id.ToString()),
+                new Claim(ClaimTypes.Name, admin.FullName),
+                new Claim(ClaimTypes.Email, admin.Email),
+                new Claim(ClaimTypes.Role, admin.Role.ToString())
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("AppSettings:Token")!));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+
+            var tokenDescriptor = new JwtSecurityToken(
+                issuer: _configuration.GetValue<string>("AppSettings:Issuer"),
+                audience: _configuration.GetValue<string>("AppSettings:Audience"),
+                claims: claims,
+                expires: DateTime.UtcNow.AddDays(1),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }
     }
 }
