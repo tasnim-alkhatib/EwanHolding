@@ -32,6 +32,6 @@
         public string Description_En { get; set; }
         public string WebsiteUrl { get; set; }
         public string LogoUrl { get; set; }
-        //public List<MediaResponseDto> Media { get; set; }
+        public List<MediaResponseDto> Media { get; set; } = new();
     }
 }
