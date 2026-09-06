@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
 using EwanHolding.Application.Services.Interfaces;
-using EwanHolding.Application.DTOs;
 using EwanHolding.Application.UnitOfWork;
 using EwanHolding.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
+using EwanHolding.Application.DTOs;
 
 namespace EwanHolding.Application.Services.Implementation
 {

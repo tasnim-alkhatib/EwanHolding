@@ -1,20 +1,24 @@
-using EwanHolding.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
-using EwanHolding.Application.UnitOfWork;
+using EwanHolding.Api.Filters;
 using EwanHolding.Application.Repositories.Implementation;
 using EwanHolding.Application.Repositories.Interfaces;
 using EwanHolding.Application.Services.Implementation;
 using EwanHolding.Application.Services.Interfaces;
+using EwanHolding.Application.UnitOfWork;
+using EwanHolding.Application.Validators;
+using EwanHolding.Infrastructure.Persistence;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Scalar.AspNetCore;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder
+    .Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -42,6 +46,17 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationFilter>();
+});
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateAdminValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateAdminValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<ChangePasswordValidator>();
+
 
 var app = builder.Build();
 

@@ -1,5 +1,4 @@
-﻿using EwanHolding.Application.DTOs;
-using EwanHolding.Domain.Entities;
+﻿using EwanHolding.Domain.Entities;
 
 namespace EwanHolding.Application.Repositories.Interfaces
 {

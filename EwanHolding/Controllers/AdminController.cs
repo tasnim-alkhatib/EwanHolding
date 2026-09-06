@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using EwanHolding.Application.Services.Interfaces;
-using EwanHolding.Application.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using EwanHolding.Application.DTOs;
 
 namespace EwanHolding.Api.Controllers
 {

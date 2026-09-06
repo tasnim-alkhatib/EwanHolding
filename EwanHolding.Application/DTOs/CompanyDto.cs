@@ -1,5 +1,4 @@
-﻿
-namespace EwanHolding.Application.DTOs
+﻿namespace EwanHolding.Application.DTOs
 {
     public class CreateCompanyDto
     {
