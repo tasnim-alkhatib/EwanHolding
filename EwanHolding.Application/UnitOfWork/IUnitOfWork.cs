@@ -1,10 +1,12 @@
-﻿using EwanHolding.Application.Repositories.Interfaces;
+﻿using EwanHolding.Application.Repositories.Implementation;
+using EwanHolding.Application.Repositories.Interfaces;
 
 namespace EwanHolding.Application.UnitOfWork
 {
     public interface IUnitOfWork 
     {
         IAdminRepository Admins { get; }
+        ICompanyRepository Companies { get; }
         Task<int> SaveChangesAsync();
     }
 }

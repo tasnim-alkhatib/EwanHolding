@@ -45,8 +45,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
 
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -59,8 +61,8 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateAdminValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateAdminValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<ChangePasswordValidator>();
-
-
+builder.Services.AddValidatorsFromAssemblyContaining<CreateCompanyValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateCompanyValidator>();
 
 var app = builder.Build();
 
