@@ -21,6 +21,8 @@ namespace EwanHolding.Application.Services.Implementation
                 Name_En = company.Name_En,
                 Description_Ar = company.Description_Ar,
                 Description_En = company.Description_En,
+                WebsiteUrl = company.WebsiteUrl,
+                LogoUrl = company.LogoUrl,
                 IsActive = company.IsActive
             });
 
@@ -39,6 +41,8 @@ namespace EwanHolding.Application.Services.Implementation
                 Name_En = company.Name_En,
                 Description_Ar = company.Description_Ar,
                 Description_En = company.Description_En,
+                WebsiteUrl = company.WebsiteUrl,
+                LogoUrl = company.LogoUrl,
                 IsActive = company.IsActive
             };
 

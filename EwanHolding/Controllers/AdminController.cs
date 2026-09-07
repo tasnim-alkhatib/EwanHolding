@@ -8,7 +8,7 @@ namespace EwanHolding.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "SuperAdmin")]
+    //[Authorize(Roles = "SuperAdmin")]
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;
@@ -28,6 +28,8 @@ namespace EwanHolding.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
+            if(id <= 0) return BadRequest("Invalid admin id, Id must be a positive integer.");
+
             var admin = await _adminService.GetByIdAsync(id);
             return Ok(admin);
         }
@@ -39,14 +41,14 @@ namespace EwanHolding.Api.Controllers
             return Ok();
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> Update(UpdateAdminDto adminDto)
         {
             await _adminService.UpdateAsync(adminDto);
             return Ok();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
             await _adminService.DeleteAsync(id);
