@@ -10,5 +10,6 @@ namespace EwanHolding.Application.Services.Interfaces
         Task UpdateAsync(UpdateAdminDto adminRequestDto);
         Task DeleteAsync(int id);
         Task<AdminResponseDto> LoginAsync(LoginDto loginDto);
+        Task ChangePasswordAsync(int id, ChangePasswordDto dto);
     }
 }

@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EwanHolding.Application.DTOs;
 using EwanHolding.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using EwanHolding.Application.DTOs;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EwanHolding.Api.Controllers
 {
@@ -49,6 +50,17 @@ namespace EwanHolding.Api.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await _adminService.DeleteAsync(id);
+            return Ok();
+        }
+
+        [HttpPut("change-password")]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto passwordDto)
+        {
+            if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var adminId))
+                return Unauthorized();
+
+            await _adminService.ChangePasswordAsync(adminId, passwordDto);
             return Ok();
         }
     }

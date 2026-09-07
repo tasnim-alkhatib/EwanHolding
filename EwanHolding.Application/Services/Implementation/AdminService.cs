@@ -127,6 +127,21 @@ namespace EwanHolding.Application.Services.Implementation
             return adminDto;
         }
 
+        public async Task ChangePasswordAsync(int id, ChangePasswordDto passwordDto)
+        {
+            var admin = await _unitOfWork.Admins.GetByIdAsync(id);
+            if (admin == null) throw new Exception($"The Admin with Id : {id} not found");
+
+            var isOldPasswordTrue = 
+                new PasswordHasher<Admin>().VerifyHashedPassword(admin, admin.PasswordHash, passwordDto.OldPassword) == PasswordVerificationResult.Success;
+            if (!isOldPasswordTrue) throw new Exception($"Old password incorrect");
+
+            admin.PasswordHash = new PasswordHasher<Admin>().HashPassword(admin, passwordDto.NewPassword);
+
+            _unitOfWork.Admins.Update(admin);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
         private string CreateToken(Admin admin)
         {
             var claims = new List<Claim>
