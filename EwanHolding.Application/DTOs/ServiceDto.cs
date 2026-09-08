@@ -6,7 +6,6 @@
         public string Name_En { get; set; }
         public string Description_Ar { get; set; }
         public string Description_En { get; set; }
-        public bool IsActive { get; set; } = true;
         public int CompanyId { get; set; }
     }
 
@@ -17,7 +16,6 @@
         public string Name_En { get; set; }
         public string Description_Ar { get; set; }
         public string Description_En { get; set; }
-        public bool IsActive { get; set; } = true;
         public int CompanyId { get; set; }
     }
 
@@ -28,7 +26,8 @@
         public string Name_En { get; set; }
         public string Description_Ar { get; set; }
         public string Description_En { get; set; }
-        public bool IsActive { get; set; }
         public int CompanyId { get; set; }
+        public string CompanyName_Ar { get; set; }
+        public string CompanyName_En { get; set; }
     }
 }

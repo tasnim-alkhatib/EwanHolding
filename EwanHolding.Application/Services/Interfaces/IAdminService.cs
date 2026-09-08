@@ -6,8 +6,8 @@ namespace EwanHolding.Application.Services.Interfaces
     {
         Task<IEnumerable<AdminResponseDto>> GetAllAsync();  
         Task<AdminResponseDto> GetByIdAsync(int id);
-        Task CreateAsync(CreateAdminDto adminRequestDto);
-        Task UpdateAsync(UpdateAdminDto adminRequestDto);
+        Task CreateAsync(CreateAdminDto adminDto);
+        Task UpdateAsync(UpdateAdminDto adminDto);
         Task DeleteAsync(int id);
         Task<AdminResponseDto> LoginAsync(LoginDto loginDto);
         Task ChangePasswordAsync(int id, ChangePasswordDto dto);

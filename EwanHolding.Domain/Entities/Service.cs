@@ -10,5 +10,6 @@ namespace EwanHolding.Domain.Entities
         public string Description_En { get; set; }
 
         public int CompanyId { get; set; }
+        public Company Company { get; set; }
     }
 }

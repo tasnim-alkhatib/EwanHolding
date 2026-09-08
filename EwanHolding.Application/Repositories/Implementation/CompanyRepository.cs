@@ -19,8 +19,8 @@ namespace EwanHolding.Application.Repositories.Implementation
         public async Task<Company> GetByNameAsync(string name)
             => await _context.Companies.AsNoTracking().FirstOrDefaultAsync(x => x.Name_En == name || x.Name_Ar == name);
 
-        public void CreateAsync(Company company) => _context.Companies.Add(company);
-        public void UpdateAsync(Company company) => _context.Companies.Update(company);
-        public void DeleteAsync(int id) => _context.Companies.Remove(new Company { Id = id });
+        public void Create(Company company) => _context.Companies.Add(company);
+        public void Update(Company company) => _context.Companies.Update(company);
+        public void Delete(int id) => _context.Companies.Remove(new Company { Id = id });
     }
 }

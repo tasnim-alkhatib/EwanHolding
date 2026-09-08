@@ -69,7 +69,7 @@ namespace EwanHolding.Application.Services.Implementation
                 CreatedAt = DateTime.UtcNow
             };
 
-            _unitOfWork.Companies.CreateAsync(newCompany);
+            _unitOfWork.Companies.Create(newCompany);
             await _unitOfWork.SaveChangesAsync();
         }
         public async Task UpdateAsync(UpdateCompanyDto companyDto)
@@ -86,7 +86,7 @@ namespace EwanHolding.Application.Services.Implementation
             company.IsActive = companyDto.IsActive;
             company.UpdatedAt = DateTime.UtcNow;
 
-            _unitOfWork.Companies.UpdateAsync(company);
+            _unitOfWork.Companies.Update(company);
             await _unitOfWork.SaveChangesAsync();
         }
         public async Task DeleteAsync(int id)
@@ -94,7 +94,7 @@ namespace EwanHolding.Application.Services.Implementation
             var company = await _unitOfWork.Companies.GetByIdAsync(id);
             if (company == null) throw new Exception($"Company with ID {id} not found.");
 
-            _unitOfWork.Companies.DeleteAsync(company.Id);
+            _unitOfWork.Companies.Delete(company.Id);
             await _unitOfWork.SaveChangesAsync();
         }
     }
