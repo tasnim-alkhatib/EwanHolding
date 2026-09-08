@@ -65,7 +65,8 @@ namespace EwanHolding.Application.Services.Implementation
                 Description_En = companyDto.Description_En,
                 WebsiteUrl = companyDto.WebsiteUrl,
                 LogoUrl = companyDto.LogoUrl,
-                IsActive = companyDto.IsActive
+                IsActive = companyDto.IsActive,
+                CreatedAt = DateTime.UtcNow
             };
 
             _unitOfWork.Companies.CreateAsync(newCompany);
@@ -83,6 +84,7 @@ namespace EwanHolding.Application.Services.Implementation
             company.LogoUrl = companyDto.LogoUrl;
             company.WebsiteUrl = companyDto.WebsiteUrl;
             company.IsActive = companyDto.IsActive;
+            company.UpdatedAt = DateTime.UtcNow;
 
             _unitOfWork.Companies.UpdateAsync(company);
             await _unitOfWork.SaveChangesAsync();

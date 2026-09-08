@@ -66,7 +66,8 @@ namespace EwanHolding.Application.Services.Implementation
                 FullName = adminRequestDto.FullName,
                 Email = adminRequestDto.Email,
                 IsActive = true,
-                Role = adminRequestDto.Role
+                Role = adminRequestDto.Role,
+                CreatedAt = DateTime.UtcNow
             };
 
             newAdmin.PasswordHash = new PasswordHasher<Admin>().HashPassword(newAdmin, adminRequestDto.Password);
@@ -84,6 +85,7 @@ namespace EwanHolding.Application.Services.Implementation
             admin.Email = adminRequestDto.Email;
             admin.IsActive = adminRequestDto.IsActive;
             admin.Role = adminRequestDto.Role;
+            admin.UpdatedAt = DateTime.UtcNow;
 
             _unitOfWork.Admins.Update(admin);
             await _unitOfWork.SaveChangesAsync();
