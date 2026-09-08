@@ -51,11 +51,12 @@ namespace EwanHolding.Application.Services.Implementation
 
         public async Task CreateAsync(CreateServiceDto serviceDto)
         {
-            var nameEnExists = await _unitOfWork.Services.GetByNameAsync(serviceDto.Name_En);
-            if (nameEnExists != null) throw new Exception($"Service with name {serviceDto.Name_En} already exists.");
+            var nameExists = await _unitOfWork.Services.GetByNameAsync(serviceDto.Name_En)
+                  ?? await _unitOfWork.Services.GetByNameAsync(serviceDto.Name_Ar);
+            if (nameExists != null) throw new Exception("Service with this name already exists.");
 
-            var nameArExists = await _unitOfWork.Services.GetByNameAsync(serviceDto.Name_Ar);
-            if (nameArExists != null) throw new Exception($"Service with name {serviceDto.Name_Ar} already exists.");
+            var company = await _unitOfWork.Companies.GetByIdAsync(serviceDto.CompanyId);
+            if (company == null) throw new Exception($"Company with ID {serviceDto.CompanyId} not found.");
 
             var service = new Service
             {
@@ -63,8 +64,7 @@ namespace EwanHolding.Application.Services.Implementation
                 Name_En = serviceDto.Name_En,
                 Description_Ar = serviceDto.Description_Ar,
                 Description_En = serviceDto.Description_En,
-                CompanyId = serviceDto.CompanyId,
-                CreatedAt = DateTime.UtcNow
+                CompanyId = serviceDto.CompanyId
             };
 
             _unitOfWork.Services.Create(service);
@@ -81,7 +81,7 @@ namespace EwanHolding.Application.Services.Implementation
             service.Description_Ar = serviceDto.Description_Ar;
             service.Description_En = serviceDto.Description_En;
             service.CompanyId = serviceDto.CompanyId;
-            service.CreatedAt = DateTime.UtcNow;
+            service.UpdatedAt = DateTime.UtcNow;
 
             _unitOfWork.Services.Update(service);
             await _unitOfWork.SaveChangesAsync();

@@ -138,6 +138,8 @@ namespace EwanHolding.Application.Services.Implementation
                 new PasswordHasher<Admin>().VerifyHashedPassword(admin, admin.PasswordHash, passwordDto.OldPassword) == PasswordVerificationResult.Success;
             if (!isOldPasswordTrue) throw new Exception($"Old password incorrect");
 
+            if(passwordDto.OldPassword == passwordDto.NewPassword) throw new Exception($"New password cannot be the same as the old password");
+
             admin.PasswordHash = new PasswordHasher<Admin>().HashPassword(admin, passwordDto.NewPassword);
 
             _unitOfWork.Admins.Update(admin);

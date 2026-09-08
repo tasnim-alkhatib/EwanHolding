@@ -1,12 +1,14 @@
 ﻿using EwanHolding.Application.DTOs;
 using EwanHolding.Application.Services.Implementation;
 using EwanHolding.Application.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EwanHolding.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(Roles = "SuperAdmin")]
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
@@ -38,14 +40,14 @@ namespace EwanHolding.Api.Controllers
             return Ok();
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update(UpdateCompanyDto company)
         {
             await _companyService.UpdateAsync(company);
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             await _companyService.DeleteAsync(id);

@@ -51,11 +51,9 @@ namespace EwanHolding.Application.Services.Implementation
 
         public async Task CreateAsync(CreateCompanyDto companyDto)
         {
-            var nameEnExists = await _unitOfWork.Companies.GetByNameAsync(companyDto.Name_En);
-            if (nameEnExists != null) throw new Exception($"Company with name {companyDto.Name_En} already exists.");
-            
-            var nameArExists = await _unitOfWork.Companies.GetByNameAsync(companyDto.Name_Ar);
-            if(nameArExists != null) throw new Exception($"Company with name {companyDto.Name_Ar} already exists.");
+            var nameExists = await _unitOfWork.Companies.GetByNameAsync(companyDto.Name_En)
+                  ?? await _unitOfWork.Companies.GetByNameAsync(companyDto.Name_Ar);
+            if (nameExists != null) throw new Exception("Company with this name already exists.");
 
             var newCompany = new Company
             {
@@ -65,8 +63,7 @@ namespace EwanHolding.Application.Services.Implementation
                 Description_En = companyDto.Description_En,
                 WebsiteUrl = companyDto.WebsiteUrl,
                 LogoUrl = companyDto.LogoUrl,
-                IsActive = companyDto.IsActive,
-                CreatedAt = DateTime.UtcNow
+                IsActive = companyDto.IsActive
             };
 
             _unitOfWork.Companies.Create(newCompany);
