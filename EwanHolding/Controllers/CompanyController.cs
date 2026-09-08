@@ -34,16 +34,18 @@ namespace EwanHolding.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCompanyDto company)
+        public async Task<IActionResult> Create(CreateCompanyDto dto)
         {
-            await _companyService.CreateAsync(company);
+            await _companyService.CreateAsync(dto);
             return Ok();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(UpdateCompanyDto company)
+        public async Task<IActionResult> Update(int id, UpdateCompanyDto dto)
         {
-            await _companyService.UpdateAsync(company);
+            if (id != dto.Id) return BadRequest("Id mismatch.");
+
+            await _companyService.UpdateAsync(dto);
             return Ok();
         }
 

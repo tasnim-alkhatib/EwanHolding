@@ -13,7 +13,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task<IEnumerable<CompanyResponseDto>> GetAllAsync()
         {
             var companies = await _unitOfWork.Companies.GetAllAsync();
-            
+
             var companyDtos = companies.Select(company => new CompanyResponseDto
             {
                 Id = company.Id,
@@ -81,7 +81,7 @@ namespace EwanHolding.Application.Services.Implementation
             company.LogoUrl = companyDto.LogoUrl;
             company.WebsiteUrl = companyDto.WebsiteUrl;
             company.IsActive = companyDto.IsActive;
-            company.UpdatedAt = DateTime.UtcNow;
+            company.UpdatedAt = DateTime.Now;
 
             _unitOfWork.Companies.Update(company);
             await _unitOfWork.SaveChangesAsync();
@@ -91,7 +91,7 @@ namespace EwanHolding.Application.Services.Implementation
             var company = await _unitOfWork.Companies.GetByIdAsync(id);
             if (company == null) throw new Exception($"Company with ID {id} not found.");
 
-            _unitOfWork.Companies.Delete(company.Id);
+            _unitOfWork.Companies.Delete(company);
             await _unitOfWork.SaveChangesAsync();
         }
     }

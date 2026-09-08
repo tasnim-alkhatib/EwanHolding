@@ -66,8 +66,7 @@ namespace EwanHolding.Application.Services.Implementation
                 FullName = adminRequestDto.FullName,
                 Email = adminRequestDto.Email,
                 IsActive = true,
-                Role = adminRequestDto.Role,
-                CreatedAt = DateTime.UtcNow
+                Role = adminRequestDto.Role
             };
 
             newAdmin.PasswordHash = new PasswordHasher<Admin>().HashPassword(newAdmin, adminRequestDto.Password);
@@ -85,7 +84,7 @@ namespace EwanHolding.Application.Services.Implementation
             admin.Email = adminRequestDto.Email;
             admin.IsActive = adminRequestDto.IsActive;
             admin.Role = adminRequestDto.Role;
-            admin.UpdatedAt = DateTime.UtcNow;
+            admin.UpdatedAt = DateTime.Now;
 
             _unitOfWork.Admins.Update(admin);
             await _unitOfWork.SaveChangesAsync();
@@ -108,7 +107,7 @@ namespace EwanHolding.Application.Services.Implementation
             var isPasswordValid = new PasswordHasher<Admin>().VerifyHashedPassword(admin, admin.PasswordHash, loginDto.Password) == PasswordVerificationResult.Success;
             if (!isPasswordValid) throw new Exception("Invalid credentials.");
 
-            admin.LastLoginAt = DateTime.UtcNow;
+            admin.LastLoginAt = DateTime.Now;
 
             _unitOfWork.Admins.Update(admin);
             await _unitOfWork.SaveChangesAsync();
@@ -164,7 +163,7 @@ namespace EwanHolding.Application.Services.Implementation
                 issuer: _configuration.GetValue<string>("AppSettings:Issuer"),
                 audience: _configuration.GetValue<string>("AppSettings:Audience"),
                 claims: claims,
-                expires: DateTime.UtcNow.AddDays(1),
+                expires: DateTime.Now.AddDays(1),
                 signingCredentials: creds
             );
 

@@ -13,7 +13,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task<IEnumerable<ServiceResponseDto>> GetAllAsync()
         {
             var services = await _unitOfWork.Services.GetAllAsync();
-            
+
             var serviceDtos = services.Select(s => new ServiceResponseDto
             {
                 Id = s.Id,
@@ -81,7 +81,7 @@ namespace EwanHolding.Application.Services.Implementation
             service.Description_Ar = serviceDto.Description_Ar;
             service.Description_En = serviceDto.Description_En;
             service.CompanyId = serviceDto.CompanyId;
-            service.UpdatedAt = DateTime.UtcNow;
+            service.UpdatedAt = DateTime.Now;
 
             _unitOfWork.Services.Update(service);
             await _unitOfWork.SaveChangesAsync();

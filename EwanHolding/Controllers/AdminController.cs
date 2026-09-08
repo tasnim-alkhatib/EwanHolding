@@ -35,20 +35,22 @@ namespace EwanHolding.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateAdminDto adminDto)
+        public async Task<IActionResult> Create(CreateAdminDto dto)
         {
-            await _adminService.CreateAsync(adminDto);
+            await _adminService.CreateAsync(dto);
             return Ok();
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update(UpdateAdminDto adminDto)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, UpdateAdminDto dto)
         {
-            await _adminService.UpdateAsync(adminDto);
+            if (id != dto.Id) return BadRequest("Id mismatch.");
+
+            await _adminService.UpdateAsync(dto);
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             await _adminService.DeleteAsync(id);

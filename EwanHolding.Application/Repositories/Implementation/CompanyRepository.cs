@@ -21,6 +21,6 @@ namespace EwanHolding.Application.Repositories.Implementation
 
         public void Create(Company company) => _context.Companies.Add(company);
         public void Update(Company company) => _context.Companies.Update(company);
-        public void Delete(int id) => _context.Companies.Remove(new Company { Id = id });
+        public void Delete(Company company) => _context.Companies.Remove(company);
     }
 }

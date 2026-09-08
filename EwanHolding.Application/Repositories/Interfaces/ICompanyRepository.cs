@@ -9,6 +9,6 @@ namespace EwanHolding.Application.Repositories.Interfaces
         Task<Company> GetByNameAsync(string name);
         void Create(Company company);
         void Update(Company company);
-        void Delete(int id);
+        void Delete(Company company);
     }
 }

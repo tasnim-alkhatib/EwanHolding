@@ -31,17 +31,19 @@ namespace EwanHolding.Api.Controllers
 
         [HttpPost]
         //[Authorize(Roles = "SuperAdmin,ContentManager")]
-        public async Task<IActionResult> Create(CreateServiceDto serviceDto) 
+        public async Task<IActionResult> Create(CreateServiceDto dto) 
         {
-            await _serviceService.CreateAsync(serviceDto);
+            await _serviceService.CreateAsync(dto);
             return Ok();
         }
 
         [HttpPut("{id}")]
         //[Authorize(Roles = "SuperAdmin,ContentManager")]
-        public async Task<IActionResult> Update(UpdateServiceDto serviceDto)
+        public async Task<IActionResult> Update(int id, UpdateServiceDto dto)
         {
-            await _serviceService.UpdateAsync(serviceDto);
+            if (id != dto.Id) return BadRequest("Id mismatch.");
+
+            await _serviceService.UpdateAsync(dto);
             return Ok();
         }
 

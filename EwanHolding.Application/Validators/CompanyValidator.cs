@@ -28,7 +28,7 @@ namespace EwanHolding.Application.Validators
                 .Must(uri => Uri.IsWellFormedUriString(uri, UriKind.Absolute)).WithMessage("Invalid website URL format.");
 
             RuleFor(x => x.LogoUrl)
-                //.NotEmpty().WithMessage("Logo URL is required.")
+                .NotEmpty().WithMessage("Logo URL is required.")
                 .Must(uri => Uri.IsWellFormedUriString(uri, UriKind.Absolute)).WithMessage("Invalid logo URL format.");
         }
     }
@@ -58,7 +58,7 @@ namespace EwanHolding.Application.Validators
                 .Must(uri => Uri.IsWellFormedUriString(uri, UriKind.Absolute)).WithMessage("Invalid website URL format.");
 
             RuleFor(x => x.LogoUrl)
-                //.NotEmpty().WithMessage("Logo URL is required.")
+                .NotEmpty().WithMessage("Logo URL is required.")
                 .Must(uri => Uri.IsWellFormedUriString(uri, UriKind.Absolute)).WithMessage("Invalid logo URL format.");
         }
     }
