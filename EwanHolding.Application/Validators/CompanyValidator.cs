@@ -25,10 +25,12 @@ namespace EwanHolding.Application.Validators
 
             RuleFor(x => x.WebsiteUrl)
                 //.NotEmpty().WithMessage("Website URL is required.")
+                .MaximumLength(500).WithMessage("Company Website URL must not exceed 500 characters.")
                 .Must(uri => Uri.IsWellFormedUriString(uri, UriKind.Absolute)).WithMessage("Invalid website URL format.");
 
             RuleFor(x => x.LogoUrl)
                 .NotEmpty().WithMessage("Logo URL is required.")
+                .MaximumLength(500).WithMessage("Company Logo URL must not exceed 500 characters.")
                 .Must(uri => Uri.IsWellFormedUriString(uri, UriKind.Absolute)).WithMessage("Invalid logo URL format.");
         }
     }
@@ -55,10 +57,12 @@ namespace EwanHolding.Application.Validators
 
             RuleFor(x => x.WebsiteUrl)
                 //.NotEmpty().WithMessage("Website URL is required.")
+                .MaximumLength(500).WithMessage("Company Website URL must not exceed 500 characters.")
                 .Must(uri => Uri.IsWellFormedUriString(uri, UriKind.Absolute)).WithMessage("Invalid website URL format.");
 
             RuleFor(x => x.LogoUrl)
                 .NotEmpty().WithMessage("Logo URL is required.")
+                .MaximumLength(500).WithMessage("Company Logo URL must not exceed 500 characters.")
                 .Must(uri => Uri.IsWellFormedUriString(uri, UriKind.Absolute)).WithMessage("Invalid logo URL format.");
         }
     }

@@ -29,6 +29,9 @@ namespace EwanHolding.Application.Validators
             RuleFor(x => x.IconUrl)
                 .NotEmpty().WithMessage("The icon URL is required")
                 .Must(uri => Uri.IsWellFormedUriString(uri, UriKind.Absolute)).WithMessage("Invalid website URL format.");
+
+            RuleFor(x => x.DisplayOrder)
+                .GreaterThanOrEqualTo(0).WithMessage("Display order must be greater than or equal to 0");
         }
     }
 
@@ -61,6 +64,9 @@ namespace EwanHolding.Application.Validators
             RuleFor(x => x.IconUrl)
                 .NotEmpty().WithMessage("The icon URL is required")
                 .Must(uri => Uri.IsWellFormedUriString(uri, UriKind.Absolute)).WithMessage("Invalid website URL format.");
+
+            RuleFor(x => x.DisplayOrder)
+                .GreaterThanOrEqualTo(0).WithMessage("Display order must be greater than or equal to 0");
         }
     }
 }

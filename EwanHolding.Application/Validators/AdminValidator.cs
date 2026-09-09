@@ -13,6 +13,7 @@ namespace EwanHolding.Application.Validators
 
             RuleFor(x => x.Email)
                 .NotEmpty().WithMessage("Email is required.")
+                .MaximumLength(200).WithMessage("Email must not exceed 200 characters.")
                 .EmailAddress().WithMessage("Invalid email format.");
 
             RuleFor(x => x.Password)
