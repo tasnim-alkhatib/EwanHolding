@@ -31,7 +31,8 @@ namespace EwanHolding.Application.Validators
         public UpdateAdminValidator()
         {
             RuleFor(x => x.Id)
-                .GreaterThan(0).WithMessage("Id must be greater than 0.");
+                .NotEmpty().WithMessage("Id is required.")
+                .GreaterThan(0).WithMessage("Admin Id must be greater than 0.");
 
             RuleFor(x => x.FullName)
                 .NotEmpty().WithMessage("Full name is required.")
@@ -43,6 +44,16 @@ namespace EwanHolding.Application.Validators
 
             RuleFor(x => x.Role)
                 .IsInEnum().WithMessage("Invalid role specified.");
+        }
+    }
+
+    public class DeleteAdminValidator : AbstractValidator<int>
+    {
+        public DeleteAdminValidator()
+        {
+            RuleFor(x => x)
+                .NotEmpty().WithMessage("Id is required.")
+                .GreaterThan(0).WithMessage("Admin Id must be greater than 0.");
         }
     }
 

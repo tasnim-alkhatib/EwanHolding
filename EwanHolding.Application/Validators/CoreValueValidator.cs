@@ -31,7 +31,7 @@ namespace EwanHolding.Application.Validators
                 .Must(uri => Uri.IsWellFormedUriString(uri, UriKind.Absolute)).WithMessage("Invalid website URL format.");
 
             RuleFor(x => x.DisplayOrder)
-                .GreaterThanOrEqualTo(0).WithMessage("Display order must be greater than or equal to 0");
+                .GreaterThan(0).WithMessage("Display Order must be greater than 0.");
         }
     }
 
@@ -40,7 +40,8 @@ namespace EwanHolding.Application.Validators
         public UpdateCoreValueValidator()
         {
             RuleFor(x => x.Id)
-                .GreaterThan(0).WithMessage("Id must be greater than 0");
+                .NotEmpty().WithMessage("Id is required.")
+                .GreaterThan(0).WithMessage("Core Value Id must be greater than 0");
 
             RuleFor(x => x.Title_En)
                 .NotEmpty().WithMessage("The title is required")
@@ -66,7 +67,17 @@ namespace EwanHolding.Application.Validators
                 .Must(uri => Uri.IsWellFormedUriString(uri, UriKind.Absolute)).WithMessage("Invalid website URL format.");
 
             RuleFor(x => x.DisplayOrder)
-                .GreaterThanOrEqualTo(0).WithMessage("Display order must be greater than or equal to 0");
+                .GreaterThan(0).WithMessage("Display Order must be greater than 0.");
+        }
+    }
+
+    public class DeleteCoreValueValidator : AbstractValidator<int>
+    {
+        public DeleteCoreValueValidator()
+        {
+            RuleFor(x => x)
+                .NotEmpty().WithMessage("Id is required.")
+                .GreaterThan(0).WithMessage("Core Value Id must be greater than 0.");
         }
     }
 }

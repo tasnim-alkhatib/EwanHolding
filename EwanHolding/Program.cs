@@ -48,11 +48,13 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
 builder.Services.AddScoped<ICoreValueService, CoreValueService>();
+builder.Services.AddScoped<IStatService, StatService>();
 
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<ICoreValueRepository, CoreValueRepository>();
+builder.Services.AddScoped<IStatRepository, StatRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

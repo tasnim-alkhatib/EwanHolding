@@ -9,6 +9,7 @@ namespace EwanHolding.Application.UnitOfWork
         ICompanyRepository Companies { get; }
         IServiceRepository Services { get; }
         ICoreValueRepository CoreValues { get; }
+        IStatRepository Stats { get; }
         Task<int> SaveChangesAsync();
     }
 }

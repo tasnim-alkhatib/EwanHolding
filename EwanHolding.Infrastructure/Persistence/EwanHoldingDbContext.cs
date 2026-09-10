@@ -95,6 +95,20 @@ namespace EwanHolding.Infrastructure.Persistence
                 entity.Property(x => x.DisplayOrder).IsRequired();
                 entity.HasIndex(x => x.DisplayOrder).IsUnique();
             });
+
+            modelBuilder.Entity<Stat>(entity =>
+            {
+                entity.Property(x => x.Label_Ar).IsRequired().HasMaxLength(100);
+                entity.HasIndex(x => x.Label_Ar).IsUnique();
+
+                entity.Property(x => x.Label_En).IsRequired().HasMaxLength(100);
+                entity.HasIndex(x => x.Label_En).IsUnique();
+
+                entity.Property(x => x.Value).IsRequired().HasMaxLength(100);
+
+                entity.Property(x => x.DisplayOrder).IsRequired();
+                entity.HasIndex(x => x.DisplayOrder).IsUnique();
+            });
         }
     }
 }

@@ -39,6 +39,10 @@ namespace EwanHolding.Application.Validators
     {
         public UpdateCompanyValidator()
         {
+            RuleFor(x => x.Id)
+                .NotEmpty().WithMessage("Id is required.")
+                .GreaterThan(0).WithMessage("Company Id must be greater than 0.");
+
             RuleFor(x => x.Name_En)
                 .NotEmpty().WithMessage("Company name is required.")
                 .MaximumLength(200).WithMessage("Company name must not exceed 200 characters.");
@@ -64,6 +68,16 @@ namespace EwanHolding.Application.Validators
                 .NotEmpty().WithMessage("Logo URL is required.")
                 .MaximumLength(500).WithMessage("Company Logo URL must not exceed 500 characters.")
                 .Must(uri => Uri.IsWellFormedUriString(uri, UriKind.Absolute)).WithMessage("Invalid logo URL format.");
+        }
+    }
+
+    public class DeleteCompanyValidator : AbstractValidator<int>
+    {
+        public DeleteCompanyValidator()
+        {
+            RuleFor(x => x)
+                .NotEmpty().WithMessage("Id is required.")
+                .GreaterThan(0).WithMessage("Company Id must be greater than 0.");
         }
     }
 }

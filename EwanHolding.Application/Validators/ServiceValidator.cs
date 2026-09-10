@@ -58,4 +58,14 @@ namespace EwanHolding.Application.Validators
                 .GreaterThan(0).WithMessage("Company ID must be greater than 0.");
         }
     }
+
+    public class DeleteServiceValidator : AbstractValidator<int>
+    {
+        public DeleteServiceValidator()
+        {
+            RuleFor(x => x)
+                .NotEmpty().WithMessage("Id is required.")
+                .GreaterThan(0).WithMessage("Service Id must be greater than 0.");
+        }
+    }
 }

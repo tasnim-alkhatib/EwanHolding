@@ -12,6 +12,7 @@ namespace EwanHolding.Application.UnitOfWork
         public ICompanyRepository Companies { get; private set; }
         public IServiceRepository Services { get; private set; }
         public ICoreValueRepository CoreValues { get; private set; }
+        public IStatRepository Stats { get; private set; }
 
         public UnitOfWork(EwanHoldingDbContext context)
         {
@@ -20,6 +21,7 @@ namespace EwanHolding.Application.UnitOfWork
             Companies = new CompanyRepository(_context);
             Services = new ServiceRepository(_context);
             CoreValues = new CoreValueRepository(_context);
+            Stats = new StatRepository(_context);
         }
 
         public Task<int> SaveChangesAsync() => _context.SaveChangesAsync();
