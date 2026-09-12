@@ -1,5 +1,6 @@
 ﻿using EwanHolding.Application.Repositories.Implementation;
 using EwanHolding.Application.Repositories.Interfaces;
+using EwanHolding.Domain.Entities;
 
 namespace EwanHolding.Application.UnitOfWork
 {
@@ -10,6 +11,7 @@ namespace EwanHolding.Application.UnitOfWork
         IServiceRepository Services { get; }
         ICoreValueRepository CoreValues { get; }
         IStatRepository Stats { get; }
+        IInvestmentOpportunitiesRepository InvestmentOpportunities { get; }
         Task<int> SaveChangesAsync();
     }
 }
