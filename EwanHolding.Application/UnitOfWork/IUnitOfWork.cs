@@ -12,6 +12,7 @@ namespace EwanHolding.Application.UnitOfWork
         ICoreValueRepository CoreValues { get; }
         IStatRepository Stats { get; }
         IInvestmentOpportunitiesRepository InvestmentOpportunities { get; }
+        INewsRepository News { get; }
         Task<int> SaveChangesAsync();
     }
 }
