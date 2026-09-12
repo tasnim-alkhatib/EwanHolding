@@ -53,6 +53,9 @@ namespace EwanHolding.Application.Services.Implementation
                 ?? await _unitOfWork.InvestmentOpportunities.GetByTitleAsync(investmentOpportunityDto.Title_En);
             if (titleExists != null) throw new Exception($"Investment Opportunity with this title already exists.");
 
+            var company = await _unitOfWork.Companies.GetByIdAsync(investmentOpportunityDto.CompanyId);
+            if (company == null) throw new Exception($"Company with ID {investmentOpportunityDto.CompanyId} not found.");
+
             var newInvestment = new InvestmentOpportunities
             {
                 Title_Ar = investmentOpportunityDto.Title_Ar,
