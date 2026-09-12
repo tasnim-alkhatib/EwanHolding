@@ -50,6 +50,11 @@ builder.Services.AddScoped<IServiceService, ServiceService>();
 builder.Services.AddScoped<ICoreValueService, CoreValueService>();
 builder.Services.AddScoped<IStatService, StatService>();
 builder.Services.AddScoped<IInvestmentOpportunitiesService, InvestmentOpportunitiesService>();
+builder.Services.AddScoped<INewsService, NewsService>();
+builder.Services.AddScoped<IContactService, ContactService>();
+//builder.Services.AddScoped<IMediaService, MediaService>();
+//builder.Services.AddScoped<ITermsAndConditionsService, TermsAndConditionsService>();
+//builder.Services.AddScoped<IPageContentService, PageContentService>();
 
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
@@ -57,6 +62,11 @@ builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<ICoreValueRepository, CoreValueRepository>();
 builder.Services.AddScoped<IStatRepository, StatRepository>();
 builder.Services.AddScoped<IInvestmentOpportunitiesRepository, InvestmentOpportunitiesRepository>();
+builder.Services.AddScoped<INewsRepository, NewsRepository>();
+builder.Services.AddScoped<IContactRepository, ContactRepository>();
+//builder.Services.AddScoped<IMediaRepository, MediaRepository>();
+//builder.Services.AddScoped<ITermsAndConditionsRepository, TermsAndConditionsRepository>();
+//builder.Services.AddScoped<IPageContentRepository, PageContentRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

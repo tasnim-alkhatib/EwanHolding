@@ -109,6 +109,43 @@ namespace EwanHolding.Infrastructure.Persistence
                 entity.Property(x => x.DisplayOrder).IsRequired();
                 //entity.HasIndex(x => x.DisplayOrder).IsUnique();
             });
+
+            modelBuilder.Entity<News>(entity =>
+            {
+                entity.Property(x => x.Title_Ar).IsRequired().HasMaxLength(200);
+                entity.Property(x => x.Title_En).IsRequired().HasMaxLength(200);
+                entity.Property(x => x.Description_Ar).IsRequired().HasMaxLength(2000);
+                entity.Property(x => x.Description_En).IsRequired().HasMaxLength(2000);
+            });
+
+            modelBuilder.Entity<Contact>(entity =>
+            {
+                entity.Property(x => x.FullName).IsRequired().HasMaxLength(150);
+                entity.Property(x => x.Email).IsRequired().HasMaxLength(200);
+                entity.Property(x => x.Phone).IsRequired().HasMaxLength(20);
+                entity.Property(x => x.Subject).IsRequired().HasMaxLength(200);
+                entity.Property(x => x.Message).IsRequired().HasMaxLength(2000);
+            });
+
+            modelBuilder.Entity<Media>(entity =>
+            {
+                entity.Property(x => x.Url).IsRequired().HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<TermsAndConditions>(entity =>
+            {
+                entity.Property(x => x.TitleAr).IsRequired().HasMaxLength(200);
+                entity.Property(x => x.TitleEn).IsRequired().HasMaxLength(200);
+                entity.Property(x => x.Description_Ar).IsRequired().HasMaxLength(5000);
+                entity.Property(x => x.Description_En).IsRequired().HasMaxLength(5000);
+            });
+
+            modelBuilder.Entity<PageContent>(entity =>
+            {
+                entity.Property(x => x.Key).IsRequired().HasMaxLength(100);
+                entity.HasIndex(x => x.Key).IsUnique();
+                entity.Property(x => x.PageName).IsRequired().HasMaxLength(100);
+            });
         }
     }
 }

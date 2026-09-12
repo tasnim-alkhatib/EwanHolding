@@ -13,6 +13,10 @@ namespace EwanHolding.Application.UnitOfWork
         IStatRepository Stats { get; }
         IInvestmentOpportunitiesRepository InvestmentOpportunities { get; }
         INewsRepository News { get; }
+        IContactRepository Contacts { get; }
+        IMediaRepository Media { get; }
+        //ITermsAndConditionsRepository TermsAndConditions { get; }
+        //IPageContentRepository PageContents { get; }
         Task<int> SaveChangesAsync();
     }
 }
