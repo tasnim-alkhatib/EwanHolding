@@ -1,7 +1,4 @@
 ﻿using EwanHolding.Application.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EwanHolding.Application.Services.Interfaces
 {

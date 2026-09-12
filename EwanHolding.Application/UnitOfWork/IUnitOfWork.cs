@@ -16,7 +16,7 @@ namespace EwanHolding.Application.UnitOfWork
         IContactRepository Contacts { get; }
         IMediaRepository Media { get; }
         ITermsAndConditionsRepository TermsAndConditions { get; }
-        //IPageContentRepository PageContents { get; }
+        IPageContentRepository PageContents { get; }
         Task<int> SaveChangesAsync();
     }
 }

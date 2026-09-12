@@ -19,7 +19,7 @@ namespace EwanHolding.Application.UnitOfWork
         public IContactRepository Contacts { get; private set; }
         public IMediaRepository Media { get; private set; }
         public ITermsAndConditionsRepository TermsAndConditions { get; private set; }
-        //public IPageContentRepository PageContents { get; private set; }
+        public IPageContentRepository PageContents { get; private set; }
 
         public UnitOfWork(EwanHoldingDbContext context)
         {
@@ -34,7 +34,7 @@ namespace EwanHolding.Application.UnitOfWork
             Contacts = new ContactRepository(_context);
             Media = new MediaRepository(_context);
             TermsAndConditions = new TermsAndConditionsRepository(_context);
-            //PageContents = new PageContentRepository(_context);
+            PageContents = new PageContentRepository(_context);
         }
 
         public Task<int> SaveChangesAsync() => _context.SaveChangesAsync();
