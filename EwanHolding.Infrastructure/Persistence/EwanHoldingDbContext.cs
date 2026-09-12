@@ -29,7 +29,7 @@ namespace EwanHolding.Infrastructure.Persistence
             modelBuilder.Entity<Admin>(entity =>
             {
                 entity.Property(x => x.FullName).IsRequired().HasMaxLength(100);
-                entity.HasIndex(x => x.FullName).IsUnique();
+                //entity.HasIndex(x => x.FullName).IsUnique();
 
                 entity.Property(x => x.Email).IsRequired().HasMaxLength(200);
                 entity.HasIndex(x => x.Email).IsUnique();
@@ -54,10 +54,10 @@ namespace EwanHolding.Infrastructure.Persistence
                 entity.Property(x => x.Description_En).IsRequired().HasMaxLength(2000);
                 
                 entity.Property(x => x.WebsiteUrl).HasMaxLength(500);
-                entity.HasIndex(x => x.WebsiteUrl).IsUnique();
+                //entity.HasIndex(x => x.WebsiteUrl).IsUnique();
 
                 entity.Property(x => x.LogoUrl).IsRequired().HasMaxLength(500);
-                entity.HasIndex(x => x.LogoUrl).IsUnique();
+                //entity.HasIndex(x => x.LogoUrl).IsUnique();
 
                 entity.Property(x => x.IsActive).IsRequired();
             });
@@ -90,10 +90,10 @@ namespace EwanHolding.Infrastructure.Persistence
                 entity.Property(x => x.Description_En).IsRequired().HasMaxLength(2000);
 
                 entity.Property(x => x.IconUrl).IsRequired().HasMaxLength(500);
-                entity.HasIndex(x => x.IconUrl).IsUnique();
+                //entity.HasIndex(x => x.IconUrl).IsUnique();
 
                 entity.Property(x => x.DisplayOrder).IsRequired();
-                entity.HasIndex(x => x.DisplayOrder).IsUnique();
+                //entity.HasIndex(x => x.DisplayOrder).IsUnique();
             });
 
             modelBuilder.Entity<Stat>(entity =>
@@ -107,7 +107,7 @@ namespace EwanHolding.Infrastructure.Persistence
                 entity.Property(x => x.Value).IsRequired().HasMaxLength(100);
 
                 entity.Property(x => x.DisplayOrder).IsRequired();
-                entity.HasIndex(x => x.DisplayOrder).IsUnique();
+                //entity.HasIndex(x => x.DisplayOrder).IsUnique();
             });
         }
     }

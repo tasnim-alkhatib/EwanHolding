@@ -7,6 +7,7 @@ namespace EwanHolding.Application.Repositories.Interfaces
         Task<IEnumerable<CoreValue>> GetAllAsync();
         Task<CoreValue> GetByIdAsync(int id);
         Task<CoreValue> GetByTitleAsync(string title);
+        Task<CoreValue> GetByDisplayOrderAsync(int displayOrder);
         void Create(CoreValue coreValue);
         void Update(CoreValue coreValue);
         void Delete(CoreValue coreValue);

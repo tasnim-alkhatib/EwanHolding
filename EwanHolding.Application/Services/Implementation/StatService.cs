@@ -49,6 +49,9 @@ namespace EwanHolding.Application.Services.Implementation
                 ?? await _unitOfWork.Stats.GetByLabelAsync(statDto.Label_En);
             if (labelExists != null) throw new Exception("A stat with the same label already exists.");
 
+            var displayOrderExists = await _unitOfWork.Stats.GetByDisplayOrderAsync(statDto.DisplayOrder);
+            if (displayOrderExists != null) throw new Exception($"Display order {statDto.DisplayOrder} is already used.");
+
             var stat = new Stat
             {
                 Label_Ar = statDto.Label_Ar,
@@ -65,6 +68,10 @@ namespace EwanHolding.Application.Services.Implementation
         {
             var stat = await _unitOfWork.Stats.GetByIdAsync(statDto.Id);
             if (stat == null) throw new Exception($"Stat with ID {statDto.Id} not found.");
+
+            var displayOrderExists = await _unitOfWork.Stats.GetByDisplayOrderAsync(statDto.DisplayOrder);
+            if (displayOrderExists != null && displayOrderExists.Id != statDto.Id)
+                throw new Exception($"Display order {statDto.DisplayOrder} is already used.");
 
             stat.Label_Ar = statDto.Label_Ar;
             stat.Label_En = statDto.Label_En;

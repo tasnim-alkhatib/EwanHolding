@@ -53,6 +53,9 @@ namespace EwanHolding.Application.Services.Implementation
                 ?? await _unitOfWork.CoreValues.GetByTitleAsync(coreValueDto.Title_En);
             if (titleExists != null) throw new Exception($"Core value with this title already exists.");
 
+            var displayOrderExists = await _unitOfWork.CoreValues.GetByDisplayOrderAsync(coreValueDto.DisplayOrder);
+            if (displayOrderExists != null) throw new Exception($"Display order {coreValueDto.DisplayOrder} is already used.");
+
             var coreValue = new CoreValue
             {
                 Title_Ar = coreValueDto.Title_Ar,
@@ -71,6 +74,10 @@ namespace EwanHolding.Application.Services.Implementation
         {
             var coreValue = await _unitOfWork.CoreValues.GetByIdAsync(coreValueDto.Id);
             if (coreValue == null) throw new Exception($"Core value with ID {coreValueDto.Id} not found.");
+
+            var displayOrderExists = await _unitOfWork.CoreValues.GetByDisplayOrderAsync(coreValueDto.DisplayOrder);
+            if (displayOrderExists != null && displayOrderExists.Id != coreValueDto.Id)
+                throw new Exception($"Display order {coreValueDto.DisplayOrder} is already used.");
 
             coreValue.Title_Ar = coreValueDto.Title_Ar;
             coreValue.Title_En = coreValueDto.Title_En;

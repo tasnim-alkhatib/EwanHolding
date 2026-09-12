@@ -19,6 +19,9 @@ namespace EwanHolding.Application.Repositories.Implementation
         public async Task<Stat> GetByLabelAsync(string label) 
             => await _context.Stats.AsNoTracking().FirstOrDefaultAsync(s => s.Label_En == label || s.Label_Ar == label);
 
+        public async Task<Stat> GetByDisplayOrderAsync(int displayOrder)
+    => await _context.Stats.AsNoTracking().FirstOrDefaultAsync(s => s.DisplayOrder == displayOrder);
+
         public void Create(Stat stat) => _context.Stats.Add(stat);
         public void Update(Stat stat) => _context.Stats.Update(stat);
         public void Delete(Stat stat) => _context.Stats.Remove(stat);

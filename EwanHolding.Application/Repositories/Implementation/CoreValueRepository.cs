@@ -19,6 +19,9 @@ namespace EwanHolding.Application.Repositories.Implementation
         public async Task<CoreValue> GetByTitleAsync(string title)
             => await _context.CoreValues.AsNoTracking().FirstOrDefaultAsync(cv => cv.Title_En == title || cv.Title_Ar == title);
 
+        public async Task<CoreValue> GetByDisplayOrderAsync(int displayOrder)
+    => await _context.CoreValues.AsNoTracking().FirstOrDefaultAsync(s => s.DisplayOrder == displayOrder);
+
         public void Create(CoreValue coreValue) => _context.CoreValues.Add(coreValue);
         public void Update(CoreValue coreValue) => _context.CoreValues.Update(coreValue);
         public void Delete(CoreValue coreValue) => _context.CoreValues.Remove(coreValue);

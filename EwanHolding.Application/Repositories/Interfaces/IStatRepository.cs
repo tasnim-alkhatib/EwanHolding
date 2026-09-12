@@ -7,6 +7,7 @@ namespace EwanHolding.Application.Repositories.Interfaces
         Task<IEnumerable<Stat>> GetAllAsync();
         Task<Stat> GetByIdAsync(int id);
         Task<Stat> GetByLabelAsync(string label);
+        Task<Stat> GetByDisplayOrderAsync(int displayOrder);
         void Create(Stat stat);
         void Update(Stat stat);
         void Delete(Stat stat);
