@@ -18,7 +18,7 @@ namespace EwanHolding.Application.UnitOfWork
         public INewsRepository News { get; private set; }
         public IContactRepository Contacts { get; private set; }
         public IMediaRepository Media { get; private set; }
-        //public ITermsAndConditionsRepository TermsAndConditions { get; private set; }
+        public ITermsAndConditionsRepository TermsAndConditions { get; private set; }
         //public IPageContentRepository PageContents { get; private set; }
 
         public UnitOfWork(EwanHoldingDbContext context)
@@ -33,7 +33,7 @@ namespace EwanHolding.Application.UnitOfWork
             News = new NewsRepository(_context);
             Contacts = new ContactRepository(_context);
             Media = new MediaRepository(_context);
-            //TermsAndConditions = new TermsAndConditionsRepository(_context);
+            TermsAndConditions = new TermsAndConditionsRepository(_context);
             //PageContents = new PageContentRepository(_context);
         }
 
