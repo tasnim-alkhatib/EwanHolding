@@ -1,6 +1,7 @@
 ﻿using EwanHolding.Application.DTOs;
 using EwanHolding.Application.Services.Implementation;
 using EwanHolding.Application.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,7 +31,7 @@ namespace EwanHolding.Api.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "SuperAdmin,ContentManager")]
+        [Authorize(Roles = "SuperAdmin,ContentManager")]
         public async Task<IActionResult> Create(CreateStatDto dto)
         {
             await _statService.CreateAsync(dto);
@@ -38,7 +39,7 @@ namespace EwanHolding.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        //[Authorize(Roles = "SuperAdmin,ContentManager")]
+        [Authorize(Roles = "SuperAdmin,ContentManager")]
         public async Task<IActionResult> Update(int id, UpdateStatDto dto)
         {
             if (id != dto.Id) return BadRequest("Id mismatch.");
@@ -48,7 +49,7 @@ namespace EwanHolding.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[Authorize(Roles = "SuperAdmin,ContentManager")]
+        [Authorize(Roles = "SuperAdmin,ContentManager")]
         public async Task<IActionResult> Delete(int id)
         {
             await _statService.DeleteAsync(id);

@@ -1,7 +1,8 @@
-﻿using EwanHolding.Application.DTOs;
+using EwanHolding.Application.DTOs;
 using EwanHolding.Application.Services.Interfaces;
 using EwanHolding.Application.UnitOfWork;
 using EwanHolding.Domain.Entities;
+using EwanHolding.Application.Exceptions;
 
 namespace EwanHolding.Application.Services.Implementation
 {
@@ -32,7 +33,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task<ServiceResponseDto> GetByIdAsync(int id)
         {
             var service = await _unitOfWork.Services.GetByIdAsync(id);
-            if (service == null) throw new Exception($"Service with ID {id} not found.");
+            if (service == null) throw new NotFoundException($"Service with ID {id} not found.");
 
             var serviceDto = new ServiceResponseDto
             {
@@ -53,10 +54,10 @@ namespace EwanHolding.Application.Services.Implementation
         {
             var nameExists = await _unitOfWork.Services.GetByNameAsync(serviceDto.Name_En)
                   ?? await _unitOfWork.Services.GetByNameAsync(serviceDto.Name_Ar);
-            if (nameExists != null) throw new Exception("Service with this name already exists.");
+            if (nameExists != null) throw new ConflictException("Service with this name already exists.");
 
             var company = await _unitOfWork.Companies.GetByIdAsync(serviceDto.CompanyId);
-            if (company == null) throw new Exception($"Company with ID {serviceDto.CompanyId} not found.");
+            if (company == null) throw new NotFoundException($"Company with ID {serviceDto.CompanyId} not found.");
 
             var service = new Service
             {
@@ -74,7 +75,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task UpdateAsync(UpdateServiceDto serviceDto)
         {
             var service = await _unitOfWork.Services.GetByIdAsync(serviceDto.Id);
-            if (service == null) throw new Exception($"Service with ID {serviceDto.Id} not found.");
+            if (service == null) throw new NotFoundException($"Service with ID {serviceDto.Id} not found.");
 
             service.Name_Ar = serviceDto.Name_Ar;
             service.Name_En = serviceDto.Name_En;
@@ -90,7 +91,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task DeleteAsync(int id)
         {
             var service = await _unitOfWork.Services.GetByIdAsync(id);
-            if (service == null) throw new Exception($"Service with ID {id} not found.");
+            if (service == null) throw new NotFoundException($"Service with ID {id} not found.");
 
             _unitOfWork.Services.Delete(service);
             await _unitOfWork.SaveChangesAsync();

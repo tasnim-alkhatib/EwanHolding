@@ -1,7 +1,8 @@
-﻿using EwanHolding.Application.DTOs;
+using EwanHolding.Application.DTOs;
 using EwanHolding.Application.Services.Interfaces;
 using EwanHolding.Application.UnitOfWork;
 using EwanHolding.Domain.Entities;
+using EwanHolding.Application.Exceptions;
 
 namespace EwanHolding.Application.Services.Implementation
 {
@@ -31,7 +32,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task<CoreValueResponseDto> GetByIdAsync(int id)
         {
             var coreValue = await _unitOfWork.CoreValues.GetByIdAsync(id);
-            if (coreValue == null) throw new Exception($"Core value with ID {id} not found.");
+            if (coreValue == null) throw new NotFoundException($"Core value with ID {id} not found.");
 
             var coreValueDto = new CoreValueResponseDto
             {
@@ -51,10 +52,10 @@ namespace EwanHolding.Application.Services.Implementation
         {
             var titleExists = await _unitOfWork.CoreValues.GetByTitleAsync(coreValueDto.Title_Ar)
                 ?? await _unitOfWork.CoreValues.GetByTitleAsync(coreValueDto.Title_En);
-            if (titleExists != null) throw new Exception($"Core value with this title already exists.");
+            if (titleExists != null) throw new ConflictException($"Core value with this title already exists.");
 
             var displayOrderExists = await _unitOfWork.CoreValues.GetByDisplayOrderAsync(coreValueDto.DisplayOrder);
-            if (displayOrderExists != null) throw new Exception($"Display order {coreValueDto.DisplayOrder} is already used.");
+            if (displayOrderExists != null) throw new ConflictException($"Display order {coreValueDto.DisplayOrder} is already used.");
 
             var coreValue = new CoreValue
             {
@@ -73,11 +74,11 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task UpdateAsync(UpdateCoreValueDto coreValueDto)
         {
             var coreValue = await _unitOfWork.CoreValues.GetByIdAsync(coreValueDto.Id);
-            if (coreValue == null) throw new Exception($"Core value with ID {coreValueDto.Id} not found.");
+            if (coreValue == null) throw new NotFoundException($"Core value with ID {coreValueDto.Id} not found.");
 
             var displayOrderExists = await _unitOfWork.CoreValues.GetByDisplayOrderAsync(coreValueDto.DisplayOrder);
             if (displayOrderExists != null && displayOrderExists.Id != coreValueDto.Id)
-                throw new Exception($"Display order {coreValueDto.DisplayOrder} is already used.");
+                throw new ConflictException($"Display order {coreValueDto.DisplayOrder} is already used.");
 
             coreValue.Title_Ar = coreValueDto.Title_Ar;
             coreValue.Title_En = coreValueDto.Title_En;
@@ -94,7 +95,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task DeleteAsync(int id)
         {
             var coreValue = await _unitOfWork.CoreValues.GetByIdAsync(id);
-            if(coreValue == null) throw new Exception($"Core value with ID {id} not found.");
+            if(coreValue == null) throw new NotFoundException($"Core value with ID {id} not found.");
 
             _unitOfWork.CoreValues.Delete(coreValue);
             await _unitOfWork.SaveChangesAsync();

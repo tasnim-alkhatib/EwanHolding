@@ -1,4 +1,5 @@
-﻿using EwanHolding.Application.DTOs;
+﻿using EwanHolding.Api.Services;
+using EwanHolding.Application.DTOs;
 using EwanHolding.Application.Services.Interfaces;
 using EwanHolding.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +12,12 @@ namespace EwanHolding.Api.Controllers
     public class MediaController : ControllerBase
     {
         private readonly IMediaService _mediaService;
-        public MediaController(IMediaService mediaService) => _mediaService = mediaService;
+        private readonly IFileStorageService _fileStorageService;
+        public MediaController(IMediaService mediaService, IFileStorageService fileStorageService)
+        {
+            _mediaService = mediaService;
+            _fileStorageService = fileStorageService;
+        }
 
         [HttpGet("entity/{entityId}/{entityType}")]
         public async Task<IActionResult> GetByEntity(int entityId, MediaEntityType entityType)
@@ -26,6 +32,32 @@ namespace EwanHolding.Api.Controllers
         {
             await _mediaService.CreateAsync(dto);
             return Ok();
+        }
+
+        /// <summary>
+        /// Uploads an actual image/PDF file (multipart/form-data) and creates its Media record in one call,
+        /// so the admin dashboard doesn't need a URL up front - it can upload the file directly.
+        /// entityType decides the storage sub-folder (company/news/investment) purely for organization on disk.
+        /// </summary>
+        [HttpPost("upload")]
+        [Authorize(Roles = "SuperAdmin,ContentManager")]
+        [RequestSizeLimit(5 * 1024 * 1024)]
+        public async Task<IActionResult> Upload([FromForm] IFormFile file, [FromForm] int entityId, [FromForm] MediaEntityType entityType, [FromForm] MediaType type, [FromForm] int displayOrder = 0)
+        {
+            var subFolder = entityType.ToString().ToLowerInvariant();
+            var url = await _fileStorageService.SaveFileAsync(file, subFolder);
+
+            var mediaDto = new CreateMediaDto
+            {
+                Url = url,
+                EntityId = entityId,
+                EntityType = entityType,
+                Type = type,
+                DisplayOrder = displayOrder
+            };
+
+            await _mediaService.CreateAsync(mediaDto);
+            return Ok(new { url });
         }
 
         [HttpDelete("{id}")]

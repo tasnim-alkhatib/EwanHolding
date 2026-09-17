@@ -1,7 +1,8 @@
-﻿using EwanHolding.Application.DTOs;
+using EwanHolding.Application.DTOs;
 using EwanHolding.Application.Services.Interfaces;
 using EwanHolding.Application.UnitOfWork;
 using EwanHolding.Domain.Entities;
+using EwanHolding.Application.Exceptions;
 
 namespace EwanHolding.Application.Services.Implementation
 {
@@ -31,7 +32,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task<InvestmentOpportunitiesResponseDto> GetByIdAsync(int id)
         {
             var investment = await _unitOfWork.InvestmentOpportunities.GetByIdAsync(id);
-            if (investment == null) throw new Exception($"Investment Opportunity with ID {id} not found.");
+            if (investment == null) throw new NotFoundException($"Investment Opportunity with ID {id} not found.");
 
             var investmentDto = new InvestmentOpportunitiesResponseDto
             {
@@ -51,10 +52,10 @@ namespace EwanHolding.Application.Services.Implementation
         {
             var titleExists = await _unitOfWork.InvestmentOpportunities.GetByTitleAsync(investmentOpportunityDto.Title_Ar)
                 ?? await _unitOfWork.InvestmentOpportunities.GetByTitleAsync(investmentOpportunityDto.Title_En);
-            if (titleExists != null) throw new Exception($"Investment Opportunity with this title already exists.");
+            if (titleExists != null) throw new ConflictException($"Investment Opportunity with this title already exists.");
 
             var company = await _unitOfWork.Companies.GetByIdAsync(investmentOpportunityDto.CompanyId);
-            if (company == null) throw new Exception($"Company with ID {investmentOpportunityDto.CompanyId} not found.");
+            if (company == null) throw new NotFoundException($"Company with ID {investmentOpportunityDto.CompanyId} not found.");
 
             var newInvestment = new InvestmentOpportunities
             {
@@ -73,7 +74,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task UpdateAsync(UpdateInvestmentOpportunitiesDto investmentOpportunityDto)
         {
             var investment = await _unitOfWork.InvestmentOpportunities.GetByIdAsync(investmentOpportunityDto.Id);
-            if (investment == null) throw new Exception($"Investment Opportunity with ID {investmentOpportunityDto.Id} not found.");
+            if (investment == null) throw new NotFoundException($"Investment Opportunity with ID {investmentOpportunityDto.Id} not found.");
 
             investment.Title_En = investmentOpportunityDto.Title_En;
             investment.Title_Ar = investmentOpportunityDto.Title_Ar;
@@ -90,7 +91,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task DeleteAsync(int id)
         {
             var investment = await _unitOfWork.InvestmentOpportunities.GetByIdAsync(id);
-            if (investment == null) throw new Exception($"Investment Opportunity with ID {id} not found.");
+            if (investment == null) throw new NotFoundException($"Investment Opportunity with ID {id} not found.");
 
             _unitOfWork.InvestmentOpportunities.Delete(investment);
             await _unitOfWork.SaveChangesAsync();

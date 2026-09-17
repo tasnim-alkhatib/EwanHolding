@@ -1,4 +1,6 @@
 using EwanHolding.Api.Filters;
+using EwanHolding.Api.Middlewares;
+using EwanHolding.Api.Services;
 using EwanHolding.Application.Repositories.Implementation;
 using EwanHolding.Application.Repositories.Interfaces;
 using EwanHolding.Application.Services.Implementation;
@@ -24,6 +26,21 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// CORS: allow the frontend origin(s) configured in appsettings (per environment)
+var corsPolicyName = "EwanHoldingFrontend";
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(corsPolicyName, policy =>
+    {
+        policy.WithOrigins(allowedOrigins)
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials(); // remove this line if the frontend never sends cookies/credentials
+    });
+});
 
 builder.Services.AddDbContext<EwanHoldingDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -69,6 +86,7 @@ builder.Services.AddScoped<ITermsAndConditionsRepository, TermsAndConditionsRepo
 builder.Services.AddScoped<IPageContentRepository, PageContentRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
 
 builder.Services.AddControllers(options =>
 {
@@ -84,6 +102,10 @@ builder.Services.AddValidatorsFromAssemblyContaining<UpdateCompanyValidator>();
 
 var app = builder.Build();
 
+// Must be first: wraps every other middleware so ANY unhandled exception below
+// gets turned into a consistent JSON error response instead of a raw 500 page.
+app.UseGlobalExceptionHandling();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -92,6 +114,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Serves the uploaded files back out from wwwroot/uploads (needed for the Media upload endpoint above).
+app.UseStaticFiles();
+
+// Must be registered after routing/https-redirection and BEFORE Authentication/Authorization,
+// otherwise the CORS preflight (OPTIONS) response headers won't be applied correctly.
+app.UseCors(corsPolicyName);
 
 app.UseAuthentication();
 app.UseAuthorization();

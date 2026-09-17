@@ -8,7 +8,6 @@ namespace EwanHolding.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "SuperAdmin")]
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;
@@ -18,7 +17,14 @@ namespace EwanHolding.Api.Controllers
             _adminService = adminService;
         }
 
+        // Only a SuperAdmin can manage admin accounts (list/view/create/update/delete).
+        // NOTE: these are deliberately NOT put behind a class-level [Authorize], because
+        // ChangePassword below must stay open to ANY authenticated admin (not just SuperAdmin)
+        // so they can change their own password - ASP.NET Core combines class-level and
+        // method-level [Authorize] with AND, so a class-level SuperAdmin-only rule would have
+        // also blocked ordinary admins from changing their own password.
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> GetAll()
         {
             var admins = await _adminService.GetAllAsync();
@@ -26,6 +32,7 @@ namespace EwanHolding.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> GetById(int id)
         {
             if(id <= 0) return BadRequest("Invalid admin id, Id must be a positive integer.");
@@ -35,6 +42,7 @@ namespace EwanHolding.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Create(CreateAdminDto dto)
         {
             await _adminService.CreateAsync(dto);
@@ -42,6 +50,7 @@ namespace EwanHolding.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Update(int id, UpdateAdminDto dto)
         {
             if (id != dto.Id) return BadRequest("Id mismatch.");
@@ -51,6 +60,7 @@ namespace EwanHolding.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _adminService.DeleteAsync(id);

@@ -1,6 +1,7 @@
 ﻿using EwanHolding.Application.DTOs;
 using EwanHolding.Application.Services.Implementation;
 using EwanHolding.Application.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,12 +9,10 @@ namespace EwanHolding.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "SuperAdmin,ContentManager")]
-
     public class InvestmentOpportunitiesController : ControllerBase
     {
-        private readonly InvestmentOpportunitiesService _investmentOpportunitiesService;
-        public InvestmentOpportunitiesController(InvestmentOpportunitiesService investmentOpportunitiesService) => _investmentOpportunitiesService = investmentOpportunitiesService;
+        private readonly IInvestmentOpportunitiesService _investmentOpportunitiesService;
+        public InvestmentOpportunitiesController(IInvestmentOpportunitiesService investmentOpportunitiesService) => _investmentOpportunitiesService = investmentOpportunitiesService;
 
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
@@ -30,6 +29,7 @@ namespace EwanHolding.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "SuperAdmin,ContentManager")]
         public async Task<IActionResult> CreateAsync(CreateInvestmentOpportunitiesDto dto)
         {
             await _investmentOpportunitiesService.CreateAsync(dto);
@@ -37,6 +37,7 @@ namespace EwanHolding.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "SuperAdmin,ContentManager")]
         public async Task<IActionResult> UpdateAsync(int id, UpdateInvestmentOpportunitiesDto dto)
         {
             if (id != dto.Id) return BadRequest("Id mismatch.");
@@ -46,6 +47,7 @@ namespace EwanHolding.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "SuperAdmin,ContentManager")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             await _investmentOpportunitiesService.DeleteAsync(id);

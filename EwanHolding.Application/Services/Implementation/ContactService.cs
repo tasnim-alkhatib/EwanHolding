@@ -1,7 +1,8 @@
-﻿using EwanHolding.Application.DTOs;
+using EwanHolding.Application.DTOs;
 using EwanHolding.Application.Services.Interfaces;
 using EwanHolding.Application.UnitOfWork;
 using EwanHolding.Domain.Entities;
+using EwanHolding.Application.Exceptions;
 using EwanHolding.Domain.Enums;
 
 namespace EwanHolding.Application.Services.Implementation
@@ -29,7 +30,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task<ContactResponseDto> GetByIdAsync(int id)
         {
             var contact = await _unitOfWork.Contacts.GetByIdAsync(id);
-            if (contact == null) throw new Exception($"Contact with ID {id} not found.");
+            if (contact == null) throw new NotFoundException($"Contact with ID {id} not found.");
             return ToDto(contact);
         }
 
@@ -52,7 +53,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task UpdateStatusAsync(UpdateContactStatusDto dto)
         {
             var contact = await _unitOfWork.Contacts.GetByIdAsync(dto.Id);
-            if (contact == null) throw new Exception($"Contact with ID {dto.Id} not found.");
+            if (contact == null) throw new NotFoundException($"Contact with ID {dto.Id} not found.");
 
             contact.Status = dto.Status;
             contact.UpdatedAt = DateTime.Now;
@@ -64,7 +65,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task DeleteAsync(int id)
         {
             var contact = await _unitOfWork.Contacts.GetByIdAsync(id);
-            if (contact == null) throw new Exception($"Contact with ID {id} not found.");
+            if (contact == null) throw new NotFoundException($"Contact with ID {id} not found.");
 
             _unitOfWork.Contacts.Delete(contact);
             await _unitOfWork.SaveChangesAsync();

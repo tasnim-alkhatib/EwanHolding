@@ -1,4 +1,4 @@
-﻿using EwanHolding.Domain.Enums;
+using EwanHolding.Domain.Enums;
 
 namespace EwanHolding.Application.DTOs
 {
@@ -8,6 +8,7 @@ namespace EwanHolding.Application.DTOs
         public string Title_En { get; set; }
         public string Description_Ar { get; set; }
         public string Description_En { get; set; }
+        public string? Category { get; set; }
         public DateTime PublishDate { get; set; } = DateTime.Now;
         public NewsStatus Status { get; set; } = NewsStatus.Draft;
     }
@@ -19,6 +20,7 @@ namespace EwanHolding.Application.DTOs
         public string Title_En { get; set; }
         public string Description_Ar { get; set; }
         public string Description_En { get; set; }
+        public string? Category { get; set; }
         public DateTime PublishDate { get; set; }
         public NewsStatus Status { get; set; }
     }
@@ -30,6 +32,7 @@ namespace EwanHolding.Application.DTOs
         public string Title_En { get; set; }
         public string Description_Ar { get; set; }
         public string Description_En { get; set; }
+        public string? Category { get; set; }
         public DateTime PublishDate { get; set; }
         public NewsStatus Status { get; set; }
         public List<MediaResponseDto> Media { get; set; } = new();

@@ -8,7 +8,6 @@ namespace EwanHolding.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "SuperAdmin")]
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
@@ -34,6 +33,7 @@ namespace EwanHolding.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "SuperAdmin,ContentManager")]
         public async Task<IActionResult> Create(CreateCompanyDto dto)
         {
             await _companyService.CreateAsync(dto);
@@ -41,6 +41,7 @@ namespace EwanHolding.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "SuperAdmin,ContentManager")]
         public async Task<IActionResult> Update(int id, UpdateCompanyDto dto)
         {
             if (id != dto.Id) return BadRequest("Id mismatch.");
@@ -50,6 +51,7 @@ namespace EwanHolding.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _companyService.DeleteAsync(id);

@@ -1,7 +1,8 @@
-﻿using EwanHolding.Application.DTOs;
+using EwanHolding.Application.DTOs;
 using EwanHolding.Application.Services.Interfaces;
 using EwanHolding.Application.UnitOfWork;
 using EwanHolding.Domain.Entities;
+using EwanHolding.Application.Exceptions;
 
 namespace EwanHolding.Application.Services.Implementation
 {
@@ -32,7 +33,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task<CompanyResponseDto> GetByIdAsync(int id)
         {
             var company = await _unitOfWork.Companies.GetByIdAsync(id);
-            if(company == null) throw new Exception($"Company with ID {id} not found.");
+            if(company == null) throw new NotFoundException($"Company with ID {id} not found.");
 
             var companyDto = new CompanyResponseDto
             {
@@ -53,7 +54,7 @@ namespace EwanHolding.Application.Services.Implementation
         {
             var nameExists = await _unitOfWork.Companies.GetByNameAsync(companyDto.Name_En)
                   ?? await _unitOfWork.Companies.GetByNameAsync(companyDto.Name_Ar);
-            if (nameExists != null) throw new Exception("Company with this name already exists.");
+            if (nameExists != null) throw new ConflictException("Company with this name already exists.");
 
             var newCompany = new Company
             {
@@ -72,7 +73,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task UpdateAsync(UpdateCompanyDto companyDto)
         {
             var company = await _unitOfWork.Companies.GetByIdAsync(companyDto.Id);
-            if(company == null) throw new Exception($"Company with ID {companyDto.Id} not found.");
+            if(company == null) throw new NotFoundException($"Company with ID {companyDto.Id} not found.");
 
             company.Name_Ar = companyDto.Name_Ar;
             company.Name_En = companyDto.Name_En;
@@ -89,7 +90,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task DeleteAsync(int id)
         {
             var company = await _unitOfWork.Companies.GetByIdAsync(id);
-            if (company == null) throw new Exception($"Company with ID {id} not found.");
+            if (company == null) throw new NotFoundException($"Company with ID {id} not found.");
 
             _unitOfWork.Companies.Delete(company);
             await _unitOfWork.SaveChangesAsync();

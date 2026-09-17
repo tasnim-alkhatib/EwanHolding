@@ -1,7 +1,8 @@
-﻿using EwanHolding.Application.DTOs;
+using EwanHolding.Application.DTOs;
 using EwanHolding.Application.Services.Interfaces;
 using EwanHolding.Application.UnitOfWork;
 using EwanHolding.Domain.Entities;
+using EwanHolding.Application.Exceptions;
 
 namespace EwanHolding.Application.Services.Implementation
 {
@@ -28,14 +29,14 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task<PageContentResponseDto> GetByIdAsync(int id)
         {
             var content = await _unitOfWork.PageContents.GetByIdAsync(id);
-            if (content == null) throw new Exception($"PageContent with ID {id} not found.");
+            if (content == null) throw new NotFoundException($"PageContent with ID {id} not found.");
             return ToDto(content);
         }
 
         public async Task CreateAsync(CreatePageContentDto dto)
         {
             var keyExists = await _unitOfWork.PageContents.GetByKeyAsync(dto.Key);
-            if (keyExists != null) throw new Exception($"Key '{dto.Key}' already exists.");
+            if (keyExists != null) throw new ConflictException($"Key '{dto.Key}' already exists.");
 
             var content = new PageContent
             {
@@ -52,7 +53,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task UpdateAsync(UpdatePageContentDto dto)
         {
             var content = await _unitOfWork.PageContents.GetByIdAsync(dto.Id);
-            if (content == null) throw new Exception($"PageContent with ID {dto.Id} not found.");
+            if (content == null) throw new NotFoundException($"PageContent with ID {dto.Id} not found.");
 
             content.Value_Ar = dto.Value_Ar;
             content.Value_En = dto.Value_En;
@@ -65,7 +66,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task DeleteAsync(int id)
         {
             var content = await _unitOfWork.PageContents.GetByIdAsync(id);
-            if (content == null) throw new Exception($"PageContent with ID {id} not found.");
+            if (content == null) throw new NotFoundException($"PageContent with ID {id} not found.");
 
             _unitOfWork.PageContents.Delete(content);
             await _unitOfWork.SaveChangesAsync();

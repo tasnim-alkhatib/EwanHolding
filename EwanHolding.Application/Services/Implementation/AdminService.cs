@@ -1,7 +1,8 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using EwanHolding.Application.Services.Interfaces;
 using EwanHolding.Application.UnitOfWork;
 using EwanHolding.Domain.Entities;
+using EwanHolding.Application.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -41,7 +42,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task<AdminResponseDto> GetByIdAsync(int id)
         {
             var admin = await _unitOfWork.Admins.GetByIdAsync(id);
-            if (admin == null) throw new Exception($"Admin with ID {id} not found.");
+            if (admin == null) throw new NotFoundException($"Admin with ID {id} not found.");
 
             var adminDto = new AdminResponseDto
             {
@@ -59,7 +60,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task CreateAsync(CreateAdminDto adminRequestDto)
         {
             var emailExists = await _unitOfWork.Admins.GetByEmailAsync(adminRequestDto.Email);
-            if (emailExists != null) throw new Exception($"Admin with email {adminRequestDto.Email} already exists.");
+            if (emailExists != null) throw new ConflictException($"Admin with email {adminRequestDto.Email} already exists.");
 
             var newAdmin = new Admin
             {
@@ -78,7 +79,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task UpdateAsync(UpdateAdminDto adminRequestDto)
         {
             var admin = await _unitOfWork.Admins.GetByIdAsync(adminRequestDto.Id);
-            if (admin == null) throw new Exception($"Admin with ID {adminRequestDto.Id} not found.");
+            if (admin == null) throw new NotFoundException($"Admin with ID {adminRequestDto.Id} not found.");
 
             admin.FullName = adminRequestDto.FullName;
             admin.Email = adminRequestDto.Email;
@@ -93,7 +94,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task DeleteAsync(int id)
         {
             var admin = await _unitOfWork.Admins.GetByIdAsync(id);
-            if (admin == null) throw new Exception($"Admin with ID {id} not found.");
+            if (admin == null) throw new NotFoundException($"Admin with ID {id} not found.");
 
             _unitOfWork.Admins.Delete(admin);
             await _unitOfWork.SaveChangesAsync();
@@ -102,10 +103,10 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task<AdminResponseDto> LoginAsync(LoginDto loginDto)
         {
             var admin = await _unitOfWork.Admins.GetByEmailAsync(loginDto.Email);
-            if (admin == null) throw new Exception("Invalid credentials.");
+            if (admin == null) throw new UnauthorizedAppException("Invalid credentials.");
 
             var isPasswordValid = new PasswordHasher<Admin>().VerifyHashedPassword(admin, admin.PasswordHash, loginDto.Password) == PasswordVerificationResult.Success;
-            if (!isPasswordValid) throw new Exception("Invalid credentials.");
+            if (!isPasswordValid) throw new UnauthorizedAppException("Invalid credentials.");
 
             admin.LastLoginAt = DateTime.Now;
 
@@ -131,13 +132,13 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task ChangePasswordAsync(int id, ChangePasswordDto passwordDto)
         {
             var admin = await _unitOfWork.Admins.GetByIdAsync(id);
-            if (admin == null) throw new Exception($"The Admin with Id : {id} not found");
+            if (admin == null) throw new NotFoundException($"The Admin with Id : {id} not found");
 
             var isOldPasswordTrue = 
                 new PasswordHasher<Admin>().VerifyHashedPassword(admin, admin.PasswordHash, passwordDto.OldPassword) == PasswordVerificationResult.Success;
-            if (!isOldPasswordTrue) throw new Exception($"Old password incorrect");
+            if (!isOldPasswordTrue) throw new BadRequestException($"Old password incorrect");
 
-            if(passwordDto.OldPassword == passwordDto.NewPassword) throw new Exception($"New password cannot be the same as the old password");
+            if(passwordDto.OldPassword == passwordDto.NewPassword) throw new BadRequestException($"New password cannot be the same as the old password");
 
             admin.PasswordHash = new PasswordHasher<Admin>().HashPassword(admin, passwordDto.NewPassword);
 

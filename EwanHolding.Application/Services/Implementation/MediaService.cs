@@ -1,7 +1,8 @@
-﻿using EwanHolding.Application.DTOs;
+using EwanHolding.Application.DTOs;
 using EwanHolding.Application.Services.Interfaces;
 using EwanHolding.Application.UnitOfWork;
 using EwanHolding.Domain.Entities;
+using EwanHolding.Application.Exceptions;
 using EwanHolding.Domain.Enums;
 
 namespace EwanHolding.Application.Services.Implementation
@@ -42,7 +43,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task DeleteAsync(int id)
         {
             var media = await _unitOfWork.Media.GetByIdAsync(id);
-            if (media == null) throw new Exception($"Media with ID {id} not found.");
+            if (media == null) throw new NotFoundException($"Media with ID {id} not found.");
 
             _unitOfWork.Media.Delete(media);
             await _unitOfWork.SaveChangesAsync();

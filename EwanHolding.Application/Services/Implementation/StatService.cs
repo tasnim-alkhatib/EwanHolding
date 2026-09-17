@@ -1,7 +1,8 @@
-﻿using EwanHolding.Application.DTOs;
+using EwanHolding.Application.DTOs;
 using EwanHolding.Application.Services.Interfaces;
 using EwanHolding.Application.UnitOfWork;
 using EwanHolding.Domain.Entities;
+using EwanHolding.Application.Exceptions;
 
 namespace EwanHolding.Application.Services.Implementation
 {
@@ -29,7 +30,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task<StatResponseDto> GetByIdAsync(int id)
         {
             var stat = await _unitOfWork.Stats.GetByIdAsync(id);
-            if (stat == null) throw new Exception($"Stat with ID {id} not found.");
+            if (stat == null) throw new NotFoundException($"Stat with ID {id} not found.");
 
             var statDto = new StatResponseDto
             {
@@ -47,10 +48,10 @@ namespace EwanHolding.Application.Services.Implementation
         {
             var labelExists = await _unitOfWork.Stats.GetByLabelAsync(statDto.Label_Ar)
                 ?? await _unitOfWork.Stats.GetByLabelAsync(statDto.Label_En);
-            if (labelExists != null) throw new Exception("A stat with the same label already exists.");
+            if (labelExists != null) throw new ConflictException("A stat with the same label already exists.");
 
             var displayOrderExists = await _unitOfWork.Stats.GetByDisplayOrderAsync(statDto.DisplayOrder);
-            if (displayOrderExists != null) throw new Exception($"Display order {statDto.DisplayOrder} is already used.");
+            if (displayOrderExists != null) throw new ConflictException($"Display order {statDto.DisplayOrder} is already used.");
 
             var stat = new Stat
             {
@@ -67,11 +68,11 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task UpdateAsync(UpdateStatDto statDto)
         {
             var stat = await _unitOfWork.Stats.GetByIdAsync(statDto.Id);
-            if (stat == null) throw new Exception($"Stat with ID {statDto.Id} not found.");
+            if (stat == null) throw new NotFoundException($"Stat with ID {statDto.Id} not found.");
 
             var displayOrderExists = await _unitOfWork.Stats.GetByDisplayOrderAsync(statDto.DisplayOrder);
             if (displayOrderExists != null && displayOrderExists.Id != statDto.Id)
-                throw new Exception($"Display order {statDto.DisplayOrder} is already used.");
+                throw new ConflictException($"Display order {statDto.DisplayOrder} is already used.");
 
             stat.Label_Ar = statDto.Label_Ar;
             stat.Label_En = statDto.Label_En;
@@ -86,7 +87,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task DeleteAsync(int id)
         {
             var stat = await _unitOfWork.Stats.GetByIdAsync(id);
-            if (stat == null) throw new Exception($"Stat with ID {id} not found.");
+            if (stat == null) throw new NotFoundException($"Stat with ID {id} not found.");
 
             _unitOfWork.Stats.Delete(stat);
             await _unitOfWork.SaveChangesAsync();

@@ -1,7 +1,8 @@
-﻿using EwanHolding.Application.DTOs;
+using EwanHolding.Application.DTOs;
 using EwanHolding.Application.Services.Interfaces;
 using EwanHolding.Application.UnitOfWork;
 using EwanHolding.Domain.Entities;
+using EwanHolding.Application.Exceptions;
 
 namespace EwanHolding.Application.Services.Implementation
 {
@@ -25,7 +26,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task<TermsAndConditionsResponseDto> GetByIdAsync(int id)
         {
             var terms = await _unitOfWork.TermsAndConditions.GetByIdAsync(id);
-            if (terms == null) throw new Exception($"Terms with ID {id} not found.");
+            if (terms == null) throw new NotFoundException($"Terms with ID {id} not found.");
             return ToDto(terms);
         }
 
@@ -46,7 +47,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task UpdateAsync(UpdateTermsAndConditionsDto dto)
         {
             var terms = await _unitOfWork.TermsAndConditions.GetByIdAsync(dto.Id);
-            if (terms == null) throw new Exception($"Terms with ID {dto.Id} not found.");
+            if (terms == null) throw new NotFoundException($"Terms with ID {dto.Id} not found.");
 
             terms.TitleAr = dto.TitleAr;
             terms.TitleEn = dto.TitleEn;
@@ -61,7 +62,7 @@ namespace EwanHolding.Application.Services.Implementation
         public async Task DeleteAsync(int id)
         {
             var terms = await _unitOfWork.TermsAndConditions.GetByIdAsync(id);
-            if (terms == null) throw new Exception($"Terms with ID {id} not found.");
+            if (terms == null) throw new NotFoundException($"Terms with ID {id} not found.");
 
             _unitOfWork.TermsAndConditions.Delete(terms);
             await _unitOfWork.SaveChangesAsync();
